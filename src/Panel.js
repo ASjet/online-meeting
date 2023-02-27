@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box } from '@mui/system';
 import Slider from '@mui/material/Slider';
 import ToggleIcon from "./ToggleIcon";
+import Ice from "./Ice"
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import MicIcon from '@mui/icons-material/Mic';
@@ -14,6 +15,9 @@ import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Drawer from '@mui/material/Drawer';
+import { IconButton } from '@mui/material';
 
 
 function Panel(props) {
@@ -30,6 +34,8 @@ function Panel(props) {
     const [camera, setCamera] = useState(false);
     const [mic, setMic] = useState(false);
     const [screenSharing, setScreenSharing] = useState(true);
+
+    const [drawer, setDrawer] = useState(false);
 
     function toggleCamera() {
         if (camera) {
@@ -117,6 +123,10 @@ function Panel(props) {
         setFullscreen(!fullscreen);
     }
 
+    function toggleDrawer() {
+        setDrawer(!drawer);
+    }
+
     return (
         <Box
             style={{
@@ -167,6 +177,23 @@ function Panel(props) {
                     toggle={screenSharing}
                     enable={ScreenShareOutlinedIcon}
                     disable={StopScreenShareOutlinedIcon} />
+                <IconButton
+                    onClick={toggleDrawer}
+                    style={{
+                        marginInline: "10px",
+                        padding: 0,
+                        color: "#FFFFFF",
+                    }}
+                >
+                    <SettingsIcon />
+                </IconButton>
+                <Drawer
+                    anchor={"right"}
+                    open={drawer}
+                    onClose={toggleDrawer}
+                >
+                    <Ice></Ice>
+                </Drawer>
                 <ToggleIcon
                     onClick={toggleFullscreen}
                     toggle={fullscreen}
