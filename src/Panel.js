@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/system';
 import Slider from '@mui/material/Slider';
-import ToggleIcon from "./ToggleIcon";
 import Ice from "./Ice"
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
@@ -18,6 +17,22 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Drawer from '@mui/material/Drawer';
 import { IconButton } from '@mui/material';
+
+
+function ToggleIcon(props) {
+    return (
+        <IconButton
+            onClick={props.onClick}
+            style={{
+                marginInline: "10px",
+                padding: 0,
+                color: "#FFFFFF",
+            }}
+        >
+            {props.toggle ? <props.enable /> : <props.disable />}
+        </IconButton>
+    )
+}
 
 
 function Panel(props) {

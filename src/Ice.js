@@ -2,9 +2,9 @@ import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
-import { useRef, useState } from 'react';
-import Divider from '@mui/material/Divider';
+import { useRef } from 'react';
 import Paper from '@mui/material/Paper';
+import io from 'socket.io-client';
 
 function Ice() {
     const addr = useRef();
@@ -21,6 +21,27 @@ function Ice() {
             password: password.current.value,
             uid: uid.current.value
         }));
+
+        // 创建WebSocket连接
+        const socket = io.connect('http://127.0.0.1:5000/signal');
+
+        // 监听连接事件
+        socket.on('connect', () => {
+            console.log('WebSocket connected.');
+
+            // 发送数据
+            socket.emit('my_event', { 'data': 'Hello, Flask-SocketIO!' });
+        });
+
+        // 监听自定义事件
+        socket.on('my_response', (data) => {
+            console.log(`Received data: ${JSON.stringify(data)}`);
+        });
+
+        // 监听连接关闭事件
+        socket.on('disconnect', () => {
+            console.log('WebSocket disconnected.');
+        });
     }
 
     return (
