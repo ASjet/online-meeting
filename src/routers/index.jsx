@@ -3,8 +3,7 @@ import Login from "@/pages/User/Login";
 import Register from "@/pages/User/Register";
 import Entry from "@/pages/Entry";
 import Video from "@/pages/Room/Guest";
-import ErrorPage400 from "../pages/ErrorPages/400";
-
+import ErrorPage400 from "@/pages/ErrorPages/400";
 import BasicLayout from "@/layouts/Basic";
 import LoginLayout from "@/layouts/Login";
 import { AuthNoLogin, AuthLogin } from "./auth";
