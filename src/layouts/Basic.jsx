@@ -103,9 +103,8 @@ export default function BasicLayout(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={handleLogout}>
         <IconButton
-          onClick={handleLogout}
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
