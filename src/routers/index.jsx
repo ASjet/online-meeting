@@ -2,7 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "@/pages/User/Login";
 import Register from "@/pages/User/Register";
 import Entry from "@/pages/Entry";
-import Video from "@/pages/Room/Guest";
+import RoomGuest from "@/pages/Room/Guest";
+import RoomAdmin from "@/pages/Room/Admin";
 import ErrorPage400 from "@/pages/ErrorPages/400";
 import BasicLayout from "@/layouts/Basic";
 import LoginLayout from "@/layouts/Login";
@@ -24,11 +25,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/room/guest",
-        element: <Video />,
+        element: <RoomGuest />,
       },
       {
         path: "/room/admin",
-        element: <Video />,
+        element: <RoomAdmin />,
       },
     ],
   },

@@ -1,9 +1,15 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Paper from "@mui/material/Paper";
 import CreateRoom from "./create";
 import JoinRoom from "./join";
 import { createRoom, getRoomInfo } from "@/api/room";
@@ -24,6 +30,7 @@ function Entry() {
   const [roomInfo, setRoomInfo] = React.useState({});
   const [openCreateDia, setOpenCreateDia] = React.useState(false);
   const [openJoinDia, setOpenJoinDia] = React.useState(false);
+  const [openCreateInfoDia, setOpenCreateInfoDia] = React.useState(false);
 
   const [alert, setAlert] = React.useState({
     open: false,
@@ -77,11 +84,8 @@ function Entry() {
     if (roomName) {
       createRoom(roomName)
         .then((res) => {
-          setAlert({
-            open: true,
-            msg: res.room_id,
-            msgType: "success",
-          });
+          setRoomInfo(res);
+          setOpenCreateInfoDia(true);
         })
         .catch((err) => {
           setAlert({
@@ -144,6 +148,22 @@ function Entry() {
         onClose={handleConfirmJoin}
       />
       <CreateRoom open={openCreateDia} onClose={handleCreate} />
+      <Dialog
+        open={openCreateInfoDia}
+        onClose={handleConfirmJoin}
+        PaperComponent={Paper}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
+          新创建的会议室信息，请将其分享给其他人
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>{JSON.stringify(roomInfo)}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmJoin}>确认并加入</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
