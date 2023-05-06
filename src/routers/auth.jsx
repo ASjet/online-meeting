@@ -1,20 +1,16 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-// 已登录的用户，不应该进入login页，直接重定向到主页
-export function AuthNoLogin(props) {
-  const auth = JSON.parse(localStorage.getItem("auth"));
-  if (auth) {
-    return <Navigate to="/" replace />;
-  }
-  return props.children;
+function isLogin() {
+  return JSON.parse(localStorage.getItem("auth"));
 }
 
-// 未登录的用户，重定向到登录页
+// 已登录的用户不应该继续访问该页面，直接重定向到主页
+export function AuthNoLogin(props) {
+  return isLogin() ? <Navigate to="/" replace /> : props.children;
+}
+
+// 未登录的用户需要重定向到登陆页面完成登陆认证
 export function AuthLogin(props) {
-  const auth = JSON.parse(localStorage.getItem("auth"));
-  if (!auth) {
-    return <Navigate to="/user/login" replace />;
-  }
-  return props.children;
+  return isLogin() ? props.children : <Navigate to="/user/login" replace />;
 }
