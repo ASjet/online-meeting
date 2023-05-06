@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DialogTitle from "@mui/material/DialogTitle";

@@ -9,18 +9,9 @@ import ListItemText from "@mui/material/ListItemText";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
 import { approveStreaming } from "@/api/request";
-
-const Alert = React.forwardRef((props, ref) => {
-  return (
-    <MuiAlert elevation={6} ref={ref} severity={props.severity}>
-      {props.message}
-    </MuiAlert>
-  );
-});
+import Alert from "@/components/Alert";
 
 const defaultRequestList = [
   {
@@ -36,6 +27,11 @@ const defaultRequestList = [
 export default function (props) {
   const room = useSelector((state) => state.room);
   const [reqs, setReqs] = useState(defaultRequestList);
+  const [alert, setAlert] = React.useState({
+    open: false,
+    msg: "",
+    msgType: "",
+  });
 
   if (props.socket) {
     props.socket.on("streaming_request", (data) => {
@@ -69,19 +65,6 @@ export default function (props) {
         });
       });
   }
-
-  const [alert, setAlert] = React.useState({
-    open: false,
-    msg: "",
-    msgType: "",
-  });
-  const closeAlert = () => {
-    setAlert({
-      open: false,
-      msg: alert.msg,
-      msgType: alert.msgType,
-    });
-  };
 
   function renderReqs(reqs) {
     return reqs.map((req) => {
@@ -126,21 +109,7 @@ export default function (props) {
 
   return (
     <Box sx={{ ml: 2, mr: 2, width: "16em" }}>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={1000}
-        onClose={closeAlert}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <Alert
-          severity={alert.msgType}
-          sx={{ width: "100%" }}
-          message={alert.msg}
-        />
-      </Snackbar>
+      <Alert ctl={alert} setCtl={setAlert} />
       <Paper
         elevation={6}
         style={{

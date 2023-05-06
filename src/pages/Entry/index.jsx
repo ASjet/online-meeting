@@ -8,22 +8,13 @@ import Typography from "@mui/material/Typography";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
-import CreateRoom from "./create";
-import JoinRoom from "./join";
 import { createRoom, getRoomInfo } from "@/api/room";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-const Alert = React.forwardRef((props, ref) => {
-  return (
-    <MuiAlert elevation={6} ref={ref} severity={props.severity}>
-      {props.message}
-    </MuiAlert>
-  );
-});
+import Alert from "@/components/Alert";
+import CreateRoom from "./create";
+import JoinRoom from "./join";
 
 function Entry() {
   const navigate = useNavigate();
@@ -38,14 +29,6 @@ function Entry() {
     msg: "",
     msgType: "",
   });
-
-  function closeAlert() {
-    setAlert({
-      open: false,
-      msg: alert.msg,
-      msgType: alert.msgType,
-    });
-  }
 
   function handleConfirmJoin(confirm) {
     if (confirm && roomInfo) {
@@ -106,21 +89,7 @@ function Entry() {
         width: "100%",
       }}
     >
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={1000}
-        onClose={closeAlert}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <Alert
-          severity={alert.msgType}
-          sx={{ width: "100%" }}
-          message={alert.msg}
-        />
-      </Snackbar>
+      <Alert ctl={alert} setCtl={setAlert} />
       <form onSubmit={handleJoin} action="#">
         <TextField
           id="outlined-password-input"

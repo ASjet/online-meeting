@@ -10,18 +10,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { userRegister } from "@/api/user";
-
-const Alert = React.forwardRef((props, ref) => {
-  return (
-    <MuiAlert elevation={6} ref={ref} severity={props.severity}>
-      {props.message}
-    </MuiAlert>
-  );
-});
+import Alert from "@/components/Alert";
 
 const theme = createTheme();
 
@@ -32,14 +23,6 @@ export default function SignUp() {
     msg: "",
     msgType: "",
   });
-
-  function closeAlert() {
-    setAlert({
-      open: false,
-      msg: alert.msg,
-      msgType: alert.msgType,
-    });
-  }
 
   function handleRegister(event) {
     event.preventDefault();
@@ -69,21 +52,14 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={1000}
-        onClose={closeAlert}
-        anchorOrigin={{
+      <Alert
+        ctl={alert}
+        setCtl={setAlert}
+        position={{
           vertical: "top",
           horizontal: "right",
         }}
-      >
-        <Alert
-          severity={alert.msgType}
-          sx={{ width: "100%" }}
-          message={alert.msg}
-        />
-      </Snackbar>
+      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
