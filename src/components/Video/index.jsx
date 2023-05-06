@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import Panel from "@/components/Panel";
+import { initP2PConnection } from "@/api/room";
+import Panel from "./panel";
 
-function Video(props) {
+export default function Video(props) {
   const room = useSelector((state) => state.room);
+  const socket = props.socket;
   const frameBox = useRef();
   const localStream = useRef();
   const remoteStream = useRef();
@@ -12,6 +14,10 @@ function Video(props) {
   const defaultVolume = 60;
   const [fullscreen, setFullscreen] = useState(false);
   const [volume, setVolume] = useState(defaultVolume);
+
+  const peerConnection = new RTCPeerConnection({
+    iceServers: room.ice_servers,
+  });
 
   const fullscreenStyle = {
     position: "fixed",
@@ -26,6 +32,32 @@ function Video(props) {
     width: "100%",
     height: "100%",
   };
+
+  useEffect(() => {
+    async function createOffer() {
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      return offer;
+    }
+
+    createOffer()
+      .then((offer) => {
+        return initP2PConnection(room.room_id, offer);
+      })
+      .then((res) => {
+        const remoteDesc = new RTCSessionDescription(res.data.answer);
+        return peerConnection.setRemoteDescription(remoteDesc);
+      })
+      .then(() => {
+        peerConnection.addEventListener("mainTrack", async (event) => {
+          const [remoteStream] = event.streams;
+          remoteStream.srcObject = remoteStream;
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
 
   return (
     <Box
@@ -85,6 +117,8 @@ function Video(props) {
           </Box>
         </Box>
         <Panel
+          socket={socket}
+          rtc={peerConnection}
           localStream={localStream}
           remoteStream={remoteStream}
           volume={volume}
@@ -96,5 +130,3 @@ function Video(props) {
     </Box>
   );
 }
-
-export default Video;

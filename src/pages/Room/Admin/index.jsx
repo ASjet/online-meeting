@@ -1,9 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Box } from "@mui/system";
+import { useSelector } from "react-redux";
+import io from "socket.io-client";
 import Video from "@/components/Video";
-import Request from "@/components/Request";
+import RequestList from "@/components/RequestList";
 
 export default function (props) {
+  const room = useSelector((state) => state.room);
+  const socket = io.connect(room.socket_addr);
   return (
     <Box
       style={{
@@ -11,8 +15,8 @@ export default function (props) {
         flexDirection: "row",
       }}
     >
-      <Video />
-      <Request />
+      <Video socket={socket} />
+      <RequestList socket={socket} />
     </Box>
   );
 }

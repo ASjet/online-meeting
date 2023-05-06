@@ -41,6 +41,7 @@ export function createRoom(roomName) {
                 room_id: generateRoomId(),
                 room_name: roomName,
                 socket_addr: "websocket server address",
+                ice_servers: [],
                 creator: "admin",
                 is_admin: true,
             }
@@ -54,6 +55,23 @@ export function createRoom(roomName) {
     } else {
         return apiAuth.post("/room", {
             room_name: roomName
+        });
+    }
+}
+
+export function initP2PConnection(roomId, offer) {
+    if (debug) {
+        return new Promise((resolve, reject) => {
+            resolve({
+                data: {
+                    answer: "answer"
+                }
+            });
+        });
+    } else {
+        return apiAuth.post("/rtc/offer", {
+            room_id: roomId,
+            offer: offer
         });
     }
 }

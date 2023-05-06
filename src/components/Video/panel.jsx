@@ -14,6 +14,7 @@ import VolumeDown from "@mui/icons-material/VolumeDown";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import { IconButton } from "@mui/material";
+import Request from "@/components/Request";
 
 function ToggleIcon(props) {
   return (
@@ -30,7 +31,7 @@ function ToggleIcon(props) {
   );
 }
 
-function Panel(props) {
+export default function Panel(props) {
   const localStream = props.localStream;
   const remoteStream = props.remoteStream;
   let fullscreen = props.fullscreen;
@@ -203,9 +204,12 @@ function Panel(props) {
           enable={FullscreenExitIcon}
           disable={FullscreenIcon}
         />
+        <Request
+          socket={props.socket}
+          rtc={props.rtc}
+          localStream={localStream}
+        />
       </div>
     </Box>
   );
 }
-
-export default Panel;
