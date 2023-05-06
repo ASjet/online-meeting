@@ -33,15 +33,15 @@ export default function SignUp() {
     msgType: "",
   });
 
-  const closeAlert = () => {
+  function closeAlert() {
     setAlert({
       open: false,
       msg: alert.msg,
       msgType: alert.msgType,
     });
-  };
+  }
 
-  const handleSubmit = (event) => {
+  function handleRegister(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const formUsername = data.get("username");
@@ -65,7 +65,7 @@ export default function SignUp() {
           msgType: "error",
         });
       });
-  };
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -103,7 +103,7 @@ export default function SignUp() {
           <Box
             component="form"
             // noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleRegister}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>

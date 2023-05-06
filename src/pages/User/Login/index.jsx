@@ -72,7 +72,7 @@ export default function SignIn() {
     }
   };
 
-  function handleSubmit(event) {
+  function handleLogin(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const formUsername = data.get("username");
@@ -152,7 +152,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
