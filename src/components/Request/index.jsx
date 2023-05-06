@@ -12,7 +12,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
-import { approveStreaming, rejectStreaming } from "@/api/request";
+import { approveStreaming } from "@/api/request";
 
 const Alert = React.forwardRef((props, ref) => {
   return (
@@ -51,26 +51,8 @@ export default function (props) {
     setReqs(reqs.filter((req) => req.id !== id));
   }
 
-  function handleApprove(req) {
-    approveStreaming(room.room_id, req.id)
-      .then((res) => {
-        removeReq(req.id);
-        setAlert({
-          open: true,
-          msg: res.message,
-          msgType: "success",
-        });
-      })
-      .catch((err) => {
-        setAlert({
-          open: true,
-          msg: err.message,
-          msgType: "error",
-        });
-      });
-  }
-  function handleReject(req) {
-    rejectStreaming(room.room_id, req.id)
+  function handleApprove(req, approve) {
+    approveStreaming(room.room_id, req.id, approve)
       .then((res) => {
         removeReq(req.id);
         setAlert({
@@ -115,7 +97,7 @@ export default function (props) {
                   aria-label="approve"
                   color="success"
                   onClick={() => {
-                    handleApprove(req);
+                    handleApprove(req, true);
                   }}
                 >
                   <DoneIcon />
@@ -126,7 +108,7 @@ export default function (props) {
                   aria-label="reject"
                   color="error"
                   onClick={() => {
-                    handleReject(req);
+                    handleApprove(req, false);
                   }}
                 >
                   <CloseIcon />

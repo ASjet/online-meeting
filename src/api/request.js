@@ -12,18 +12,10 @@ export function cancelStreaming(roomId) {
     });
 }
 
-export function approveStreaming(roomId, requestId) {
+export function approveStreaming(roomId, requestId, approve) {
     return apiAdmin.post("/streaming/approve", {
         room_id: roomId,
         request_id: requestId,
-        approve: true
-    });
-}
-
-export function rejectStreaming(roomId, requestId) {
-    return apiAdmin.post("/streaming/approve", {
-        room_id: roomId,
-        request_id: requestId,
-        approve: false
+        approve: approve
     });
 }
