@@ -26,13 +26,10 @@ export default function JoinRoom(props) {
       aria-labelledby="draggable-dialog-title"
     >
       <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-        你将要加入的会议室信息
+        即将加入由{roomInfo.creator}创建的会议室「{roomInfo.room_name}」
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText>{JSON.stringify(roomInfo)}</DialogContentText>
-      </DialogContent>
       <DialogActions>
-        <Button onClick={handleJoin}>加入</Button>
+        <Button onClick={handleJoin}>确认</Button>
         <Button autoFocus onClick={handleCancel}>
           取消
         </Button>

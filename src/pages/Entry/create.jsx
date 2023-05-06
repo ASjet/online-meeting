@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 
-function CreateRoom(props) {
+export default function CreateRoom(props) {
   const { onClose, open } = props;
 
   const handleClose = () => {
@@ -27,8 +27,8 @@ function CreateRoom(props) {
         component="form"
         onSubmit={handleCreate}
         sx={{
-          ml: "10px",
-          mr: "10px",
+          ml: "20px",
+          mr: "20px",
         }}
       >
         <TextField
@@ -53,10 +53,3 @@ function CreateRoom(props) {
     </Dialog>
   );
 }
-
-CreateRoom.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-};
-
-export default CreateRoom;

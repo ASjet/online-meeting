@@ -1,54 +1,59 @@
 import { apiAuth } from '@/api';
 
-function haveRoom(roomName) {
+const debug = true
+
+function getRoom(roomId) {
     const storedRooms = JSON.parse(localStorage.getItem("rooms"));
-    return storedRooms && storedRooms.filter(room => room.room_name === roomName).length > 0;
+    if (storedRooms) {
+        return storedRooms[roomId];
+    } else {
+        return null;
+    }
+}
+
+function generateRoomId() {
+    return String(Math.floor(Math.random() * 1000000000));
 }
 
 export function getRoomInfo(roomId) {
-    // return apiAuth.get(`/room`, {
-    //     params: { room_id: roomId }
-    // });
-    return new Promise((resolve, reject) => {
-        if (haveRoom(roomId)) {
-            resolve({
-                room_id: "room_id",
-                room_name: "room_name",
-                socket_addr: "websocket server address",
-                is_admin: false,
-            });
-        } else {
-            reject({
-                message: "会议室不存在"
-            });
-        }
-    });
+    if (debug) {
+        return new Promise((resolve, reject) => {
+            const room = getRoom(roomId);
+            if (room) {
+                resolve(room);
+            } else {
+                reject({
+                    message: "会议室不存在"
+                });
+            }
+        });
+    } else {
+        return apiAuth.get("/room", {
+            params: { room_id: roomId }
+        });
+    }
 }
 
 export function createRoom(roomName) {
-    // return apiAuth.post(`/room`, {
-    //     room_name: roomName
-    // });
-    return new Promise((resolve, reject) => {
-        const storedRooms = JSON.parse(localStorage.getItem("rooms"));
-        if (storedRooms && storedRooms.filter(room => room.room_name === roomName).length > 0) {
-            reject({
-                message: "会议室名已存在"
-            });
-        } else {
+    if (debug) {
+        return new Promise((resolve, reject) => {
             const newRoom = {
-                room_id: "room_id",
+                room_id: generateRoomId(),
                 room_name: roomName,
                 socket_addr: "websocket server address",
+                creator: "admin",
                 is_admin: true,
-            };
-            if (storedRooms) {
-                storedRooms.push(newRoom);
-                localStorage.setItem("rooms", JSON.stringify(storedRooms));
-            } else {
-                localStorage.setItem("rooms", JSON.stringify([newRoom]));
             }
+            const storedRooms = JSON.parse(localStorage.getItem("rooms"));
+            localStorage.setItem("rooms", JSON.stringify({
+                ...storedRooms,
+                [newRoom.room_id]: newRoom
+            }));
             resolve(newRoom);
-        }
-    });
+        });
+    } else {
+        return apiAuth.post("/room", {
+            room_name: roomName
+        });
+    }
 }

@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import Typography from "@mui/material/Typography";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
@@ -37,15 +38,16 @@ function Entry() {
     msg: "",
     msgType: "",
   });
-  const closeAlert = () => {
+
+  function closeAlert() {
     setAlert({
       open: false,
       msg: alert.msg,
       msgType: alert.msgType,
     });
-  };
+  }
 
-  const handleConfirmJoin = (confirm) => {
+  function handleConfirmJoin(confirm) {
     if (confirm && roomInfo) {
       dispatch.room.setRoomInfo(roomInfo);
       if (roomInfo.is_admin) {
@@ -55,12 +57,13 @@ function Entry() {
       }
     }
     setOpenJoinDia(false);
-  };
+    setOpenCreateDia(false);
+  }
 
   function handleJoin(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const roomId = data.get("roomId");
+    const roomId = data.get("roomId").replace(/\s/g, "");
     getRoomInfo(roomId)
       .then((res) => {
         setRoomInfo(res);
@@ -75,11 +78,11 @@ function Entry() {
       });
   }
 
-  const handleOpenCreateDia = () => {
+  function handleOpenCreateDia() {
     setOpenCreateDia(true);
-  };
+  }
 
-  const handleCreate = (roomName) => {
+  function handleCreate(roomName) {
     setOpenCreateDia(false);
     if (roomName) {
       createRoom(roomName)
@@ -95,7 +98,7 @@ function Entry() {
           });
         });
     }
-  };
+  }
 
   return (
     <Box
@@ -150,18 +153,33 @@ function Entry() {
       <CreateRoom open={openCreateDia} onClose={handleCreate} />
       <Dialog
         open={openCreateInfoDia}
-        onClose={handleConfirmJoin}
+        onClose={() => {
+          setOpenCreateInfoDia(false);
+        }}
         PaperComponent={Paper}
         aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          新创建的会议室信息，请将其分享给其他人
+          会议室「{roomInfo.room_name}」的ID如下，请将其分享给其他人
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText>{JSON.stringify(roomInfo)}</DialogContentText>
+        <DialogContent sx={{ textAlign: "center" }}>
+          <DialogContentText>
+            <Typography variant="h5" component="div">
+              {String(roomInfo.room_id).replace(
+                /(\d{3})(\d{3})(\d{3})/,
+                "$1\u00a0$2\u00a0$3"
+              )}
+            </Typography>
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirmJoin}>确认并加入</Button>
+          <Button
+            onClick={() => {
+              handleConfirmJoin(true);
+            }}
+          >
+            确认并加入
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
