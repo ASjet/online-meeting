@@ -44,7 +44,7 @@ export default function Panel(props) {
 
   const [camera, setCamera] = useState(false);
   const [mic, setMic] = useState(false);
-  const [screenSharing, setScreenSharing] = useState(true);
+  // const [screenSharing, setScreenSharing] = useState(true);
 
   function toggleCamera() {
     if (camera) {
@@ -87,31 +87,31 @@ export default function Panel(props) {
     setMic(!mic);
   }
 
-  function toggleScreenSharing() {
-    if (screenSharing) {
-      navigator.mediaDevices
-        .getDisplayMedia({ video: true })
-        .then((stream) => {
-          if (remoteStream.current.srcObject != null) {
-            remoteStream.current.srcObject
-              .getTracks()
-              .forEach((track) => track.stop());
-          }
-          remoteStream.current.srcObject = stream;
-        })
-        .catch((error) => {
-          alert("Failed to getDisplayMedia: ", error);
-        });
-    } else {
-      if (remoteStream.current.srcObject != null) {
-        remoteStream.current.srcObject
-          .getTracks()
-          .forEach((track) => track.stop());
-      }
-      remoteStream.current.srcObject = null;
-    }
-    setScreenSharing(!screenSharing);
-  }
+  // function toggleScreenSharing() {
+  //   if (screenSharing) {
+  //     navigator.mediaDevices
+  //       .getDisplayMedia({ video: true })
+  //       .then((stream) => {
+  //         if (remoteStream.current.srcObject != null) {
+  //           remoteStream.current.srcObject
+  //             .getTracks()
+  //             .forEach((track) => track.stop());
+  //         }
+  //         remoteStream.current.srcObject = stream;
+  //       })
+  //       .catch((error) => {
+  //         alert("Failed to getDisplayMedia: ", error);
+  //       });
+  //   } else {
+  //     if (remoteStream.current.srcObject != null) {
+  //       remoteStream.current.srcObject
+  //         .getTracks()
+  //         .forEach((track) => track.stop());
+  //     }
+  //     remoteStream.current.srcObject = null;
+  //   }
+  //   setScreenSharing(!screenSharing);
+  // }
 
   const toggleVolume = (_, newVolume) => {
     if (newVolume === 0) {
@@ -192,12 +192,12 @@ export default function Panel(props) {
             color: "#FFFFFF",
           }}
         />
-        <ToggleIcon
+        {/* <ToggleIcon
           onClick={toggleScreenSharing}
           toggle={screenSharing}
           enable={ScreenShareOutlinedIcon}
           disable={StopScreenShareOutlinedIcon}
-        />
+        /> */}
         <ToggleIcon
           onClick={toggleFullscreen}
           toggle={fullscreen}
@@ -208,6 +208,9 @@ export default function Panel(props) {
           socket={props.socket}
           rtc={props.rtc}
           localStream={localStream}
+          remoteStream={remoteStream}
+          reqChan={props.reqChan}
+          approveChan={props.approveChan}
         />
       </div>
     </Box>

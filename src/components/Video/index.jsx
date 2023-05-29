@@ -33,31 +33,31 @@ export default function Video(props) {
     height: "100%",
   };
 
-  useEffect(() => {
-    async function createOffer() {
-      const offer = await peerConnection.createOffer();
-      await peerConnection.setLocalDescription(offer);
-      return offer;
-    }
+  // useEffect(() => {
+  //   async function createOffer() {
+  //     const offer = await peerConnection.createOffer();
+  //     await peerConnection.setLocalDescription(offer);
+  //     return offer;
+  //   }
 
-    createOffer()
-      .then((offer) => {
-        return initP2PConnection(room.room_id, offer);
-      })
-      .then((res) => {
-        const remoteDesc = new RTCSessionDescription(res.data.answer);
-        return peerConnection.setRemoteDescription(remoteDesc);
-      })
-      .then(() => {
-        peerConnection.addEventListener("mainTrack", async (event) => {
-          const [remoteStream] = event.streams;
-          remoteStream.srcObject = remoteStream;
-        });
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }, []);
+  //   createOffer()
+  //     .then((offer) => {
+  //       return initP2PConnection(room.room_id, offer);
+  //     })
+  //     .then((res) => {
+  //       const remoteDesc = new RTCSessionDescription(res.data.answer);
+  //       return peerConnection.setRemoteDescription(remoteDesc);
+  //     })
+  //     .then(() => {
+  //       peerConnection.addEventListener("mainTrack", async (event) => {
+  //         const [remoteStream] = event.streams;
+  //         remoteStream.srcObject = remoteStream;
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // }, []);
 
   return (
     <Box
@@ -82,6 +82,7 @@ export default function Video(props) {
           <video
             ref={remoteStream}
             autoPlay
+            volume={volume}
             style={{
               width: "100%",
               height: "100%",
@@ -106,7 +107,6 @@ export default function Video(props) {
               ref={localStream}
               autoPlay
               muted
-              volume={volume}
               style={{
                 width: "100%",
                 height: "100%",
@@ -125,6 +125,8 @@ export default function Video(props) {
           setVolume={setVolume}
           fullscreen={fullscreen}
           setFullscreen={setFullscreen}
+          reqChan={props.reqChan}
+          approveChan={props.approveChan}
         />
       </Box>
     </Box>

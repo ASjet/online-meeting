@@ -46,7 +46,6 @@ export function userLogin(username, password) {
                 });
             }
         });
-
     } else {
         return apiNoAuth.post("/user/login", {
             username: username,

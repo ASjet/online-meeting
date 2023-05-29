@@ -25,8 +25,10 @@ const defaultRequestList = [
 ];
 
 export default function (props) {
+  const [reqs, setReqs] = useState([]);
   const room = useSelector((state) => state.room);
-  const [reqs, setReqs] = useState(defaultRequestList);
+  const reqChan = props.reqChan.port2;
+  const approveChan = props.approveChan.port2;
   const [alert, setAlert] = React.useState({
     open: false,
     msg: "",
@@ -38,6 +40,14 @@ export default function (props) {
       addReq(data.name, data.id);
     });
   }
+
+  reqChan.onmessage = (e) => {
+    if (e.data.cancel) {
+      removeReq(e.data.id);
+    } else {
+      addReq(e.data.name, e.data.id);
+    }
+  };
 
   function addReq(name, id) {
     setReqs([...reqs, { name: name, id: id }]);
@@ -51,6 +61,7 @@ export default function (props) {
     approveStreaming(room.room_id, req.id, approve)
       .then((res) => {
         removeReq(req.id);
+        approveChan.postMessage(approve);
         setAlert({
           open: true,
           msg: res.message,

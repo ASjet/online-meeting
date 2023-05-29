@@ -36,13 +36,14 @@ export function getRoomInfo(roomId) {
 
 export function createRoom(roomName) {
     if (debug) {
+        const auth = JSON.parse(localStorage.getItem("auth"));
         return new Promise((resolve, reject) => {
             const newRoom = {
                 room_id: generateRoomId(),
                 room_name: roomName,
                 socket_addr: "websocket server address",
                 ice_servers: [],
-                creator: "admin",
+                creator: auth.username,
                 is_admin: true,
             }
             const storedRooms = JSON.parse(localStorage.getItem("rooms"));

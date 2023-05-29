@@ -31,9 +31,17 @@ export function cancelRequest(roomId) {
 }
 
 export function approveStreaming(roomId, requestId, approve) {
-    return apiAdmin.post("/streaming/approve", {
-        room_id: roomId,
-        request_id: requestId,
-        approve: approve
-    });
+    if (debug) {
+        return new Promise((resolve, reject) => {
+            resolve({
+                message: "处理成功"
+            });
+        })
+    } else {
+        return apiAdmin.post("/streaming/approve", {
+            room_id: roomId,
+            request_id: requestId,
+            approve: approve
+        });
+    }
 }

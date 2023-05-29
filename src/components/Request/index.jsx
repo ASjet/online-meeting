@@ -10,8 +10,11 @@ const RequestingIconColor = "#777777";
 const NotRequestingIconColor = "#FFFFFF";
 
 export default function Request(props) {
+  const auth = JSON.parse(localStorage.getItem("auth"));
   const room = useSelector((state) => state.room);
   const socket = props.socket;
+  const reqChan = props.reqChan.port1;
+  const approveChan = props.approveChan.port1;
   const [isStreaming, setIsStreaming] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
   const [alert, setAlert] = React.useState({
@@ -19,6 +22,27 @@ export default function Request(props) {
     msg: "",
     msgType: "",
   });
+
+  approveChan.onmessage = (e) => {
+    if (e.data) {
+      setIsStreaming(true);
+      setAlert({
+        open: true,
+        msg: "推流已开启",
+        msgType: "success",
+      });
+      props.remoteStream.current.srcObject =
+        props.localStream.current.srcObject;
+    } else {
+      setIsStreaming(false);
+      setAlert({
+        open: true,
+        msg: "推流请求被拒绝",
+        msgType: "error",
+      });
+    }
+    setIsRequesting(false);
+  };
 
   if (socket) {
     socket.on("streaming_response", (data) => {
@@ -48,6 +72,11 @@ export default function Request(props) {
     if (isRequesting) {
       cancelRequest(room.room_id)
         .then((res) => {
+          reqChan.postMessage({
+            id: auth.username,
+            name: auth.username,
+            cancel: true,
+          });
           setIsRequesting(false);
           setAlert({
             open: true,
@@ -70,9 +99,15 @@ export default function Request(props) {
         msg: "推流已关闭",
         msgType: "success",
       });
+      props.remoteStream.current.srcObject = null;
     } else {
       requestStreaming(room.room_id)
         .then((res) => {
+          reqChan.postMessage({
+            id: auth.username,
+            name: auth.username,
+            cancel: false,
+          });
           setIsRequesting(true);
           setAlert({
             open: true,
