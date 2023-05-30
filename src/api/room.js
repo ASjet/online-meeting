@@ -1,6 +1,6 @@
 import { apiAuth } from '@/api';
 
-const debug = true
+const debug = false
 
 function getRoom(roomId) {
     const storedRooms = JSON.parse(localStorage.getItem("rooms"));

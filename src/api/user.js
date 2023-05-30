@@ -1,7 +1,7 @@
 import { apiNoAuth, apiAuth } from "@/api";
 
 const defaultToken = "1234567890";
-const debug = true;
+const debug = false;
 
 export function userRegister(username, password) {
     if (debug) {

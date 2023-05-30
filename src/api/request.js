@@ -1,6 +1,6 @@
 import { apiAuth, apiAdmin } from "@/api"
 
-const debug = true;
+const debug = false;
 
 export function requestStreaming(roomId) {
     if (debug) {

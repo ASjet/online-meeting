@@ -8,8 +8,6 @@ import RequestList from "@/components/RequestList";
 export default function (props) {
   const room = useSelector((state) => state.room);
   const socket = io.connect(room.socket_addr);
-  const reqChan = new MessageChannel();
-  const approveChan = new MessageChannel();
   return (
     <Box
       style={{
@@ -17,12 +15,8 @@ export default function (props) {
         flexDirection: "row",
       }}
     >
-      <Video socket={socket} reqChan={reqChan} approveChan={approveChan} />
-      <RequestList
-        socket={socket}
-        reqChan={reqChan}
-        approveChan={approveChan}
-      />
+      <Video socket={socket} />
+      <RequestList socket={socket} />
     </Box>
   );
 }

@@ -12,7 +12,7 @@ const apiAuth = axios.create({
   baseURL: "/api/",
   timeout: 1000,
   headers: {
-    Authorization: store.getState("user/auth"),
+    Authorization: JSON.parse(localStorage.getItem("auth")).token,
   },
 });
 
@@ -20,7 +20,7 @@ const apiAdmin = axios.create({
   baseURL: "/api/",
   timeout: 1000,
   headers: {
-    Authorization: store.getState("user/auth"),
+    Authorization: JSON.parse(localStorage.getItem("auth")).token,
   },
 });
 

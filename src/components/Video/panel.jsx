@@ -208,9 +208,6 @@ export default function Panel(props) {
           socket={props.socket}
           rtc={props.rtc}
           localStream={localStream}
-          remoteStream={remoteStream}
-          reqChan={props.reqChan}
-          approveChan={props.approveChan}
         />
       </div>
     </Box>
